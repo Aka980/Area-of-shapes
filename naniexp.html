@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form With Bootstrap</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      /* Styles for the .container-sm */
+      .container-sm {
+        max-width: 700px;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        background: #f5f7fa; /* Start with the first color of the gradient */
+        background: linear-gradient(to bottom, #f5f7fa 0%, #c3cfe2 100%),
+          radial-gradient(
+              at top center,
+              rgba(255, 255, 255, 0.4) 0%,
+              rgba(0, 0, 0, 0.4) 120%
+            )
+            #989898;
+
+        /* Centering the container */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        overflow-y: auto; /* Enable vertical scroll if content exceeds */
+        height: 80%; /* Set a fixed height for the container */
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+      }
+
+      /* Additional style for body */
+      body {
+        /* Background image */
+        background-image: url(./Screenshot\ 2024-07-10\ 151631.jpg); /* Replace with your image path */
+        background-size: cover; /* Cover the entire background */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* No repeating of the image */
+        background-attachment: fixed; /* Fixed background image */
+      }
+
+      /* Adjust input spacing */
+      .input-group {
+        margin-bottom: 10px; /* Space between inputs */
+      }
+
+      canvas {
+        border: 1px solid #000;
+        display: block;
+        margin: 0% auto;
+        padding: 0% auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-sm">
+      <main>
+        <div class="py-5 text-center">
+          <h1>Find Area</h1>
+          <p class="lead">Using Bootstrap to create an Area calculator</p>
+        </div>
+        <div>
+          <div class="my-4">
+            <form
+              class="needs-validation"
+              novalidate
+              id="rsvpForm"
+              onsubmit="calculateArea(event)"
+            >
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label for="shape" class="form-label">Shape name</label>
+                  <select
+                    class="form-select"
+                    id="shape"
+                    onchange="showHideInputs()"
+                    required
+                  >
+                    <option value="">Choose the shape</option>
+                    <option value="TRI">Triangle</option>
+                    <option value="REC">Rectangle</option>
+                    <option value="SQR">Square</option>
+                  </select>
+                </div>
+                <div class="row g-3">
+                  <div class="invalid-feedback">Please select a shape.</div>
+                  <canvas id="shapeCanvas" width="auto" height="auto"></canvas>
+                </div>
+                <div
+                  class="row g-3"
+                  id="baseHeightInputs"
+                  style="display: none"
+                >
+                  <div class="form-group">
+                    <label for="base" class="form-label">Base</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="base"
+                      placeholder="Enter the base length"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="height" class="form-label">Height</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="height"
+                      placeholder="Enter the height"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row g-3" id="sideInputs" style="display: none">
+                  <div class="form-group">
+                    <label for="side_a" class="form-label">Side a</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="side_a"
+                      placeholder="Enter the length of side a"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="side_b" class="form-label">Side b</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="side_b"
+                      placeholder="Enter the length of side b"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row g-3" id="widthInput" style="display: none">
+                  <div class="form-group">
+                    <label for="width" class="form-label">Width</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="width"
+                      placeholder="Enter the width"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="length" class="form-label">Length</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="length"
+                      placeholder="Enter the length"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-12 text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="resetForm()"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div class="col-12 mt-3">
+                  <div
+                    id="resultArea"
+                    class="alert alert-info"
+                    role="alert"
+                    style="display: none"
+                  ></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function showHideInputs() {
+        var shape = document.getElementById("shape").value;
+        var baseHeightInputs = document.getElementById("baseHeightInputs");
+        var sideInputs = document.getElementById("sideInputs");
+        var widthInput = document.getElementById("widthInput");
+
+        baseHeightInputs.style.display = "none";
+        sideInputs.style.display = "none";
+        widthInput.style.display = "none";
+
+        if (shape === "TRI") {
+          baseHeightInputs.style.display = "block";
+          sideInputs.style.display = "block";
+          drawTriangle();
+        } else if (shape === "REC") {
+          widthInput.style.display = "block";
+          drawRectangle();
+        } else if (shape === "SQR") {
+          sideInputs.style.display = "block";
+          drawSquare();
+        }
+      }
+
+      function drawTriangle() {
+        var canvas = document.getElementById("shapeCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw triangle
+        ctx.beginPath();
+        ctx.moveTo(100, 20);
+        ctx.lineTo(180, 100);
+        ctx.lineTo(20, 100);
+        ctx.lineTo(100, 20);
+        ctx.closePath(); // Draws last line of the triangle
+
+        // Outline
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+
+        // Fill color
+        ctx.fillStyle = "#f00";
+        ctx.fill();
+      }
+
+      function drawRectangle() {
+        var canvas = document.getElementById("shapeCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw rectangle
+        ctx.fillStyle = "#00f";
+        ctx.fillRect(50, 50, 100, 75);
+      }
+
+      function drawSquare() {
+        var canvas = document.getElementById("shapeCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw square
+        ctx.fillStyle = "#0f0";
+        ctx.fillRect(50, 50, 50, 50);
+      }
+
+      function calculateArea(event) {
+        event.preventDefault();
+        var shape = document.getElementById("shape").value;
+        var area = 0;
+        var perimeter = 0;
+
+        if (shape === "TRI") {
+          var base = parseFloat(document.getElementById("base").value);
+          var height = parseFloat(document.getElementById("height").value);
+          var side_a = parseFloat(document.getElementById("side_a").value);
+          var side_b = parseFloat(document.getElementById("side_b").value);
+          area = 0.5 * base * height;
+          perimeter = side_a + side_b + base;
+        } else if (shape === "REC") {
+          var length = parseFloat(document.getElementById("length").value);
+          var width = parseFloat(document.getElementById("width").value);
+          area = length * width;
+          perimeter = 2 * (length + width);
+        } else if (shape === "SQR") {
+          var side_a = parseFloat(document.getElementById("side_a").value);
+          area = side_a * side_a;
+          perimeter = 4 * side_a;
+        }
+
+        var resultArea = document.getElementById("resultArea");
+        resultArea.style.display = "block";
+        resultArea.innerHTML =
+          "The area of the shape is: " +
+          area.toFixed(2) +
+          "<br>The perimeter of the shape is: " +
+          perimeter.toFixed(2);
+      }
+
+      function resetForm() {
+        document.getElementById("rsvpForm").reset();
+        showHideInputs();
+        document.getElementById("resultArea").style.display = "none";
+        clearCanvas();
+      }
+
+      function clearCanvas() {
+        var canvas = document.getElementById("shapeCanvas");
+        var ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    </script>
+  </body>
+</html>
