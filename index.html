@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="loginApp">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Form</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+      body {
+        /* Background image */
+        background-image: url(./Screenshot\ 2024-07-10\ 151631.jpg); /* Replace with your image path */
+        background-size: cover; /* Cover the entire background */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* No repeating of the image */
+        background-attachment: fixed; /* Fixed background image */
+      }
+
+      .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 100px;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="login-container">
+            <h2 class="text-center mb-4">Login</h2>
+            <form
+              name="loginForm"
+              ng-controller="LoginController"
+              ng-submit="login()"
+              novalidate
+            >
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  name="username"
+                  ng-model="user.username"
+                  required
+                />
+                <div
+                  class="invalid-feedback"
+                  ng-show="loginForm.username.$dirty && loginForm.username.$error.required"
+                >
+                  Username is required.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  ng-model="user.password"
+                  required
+                />
+                <div
+                  class="invalid-feedback"
+                  ng-show="loginForm.password.$dirty && loginForm.password.$error.required"
+                >
+                  Password is required.
+                </div>
+              </div>
+              <div class="text-center">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  ng-disabled="loginForm.$invalid"
+                >
+                  Login
+                </button>
+              </div>
+              <div class="mt-3 text-center">
+                <span class="text-muted"
+                  >Demo credentials: Username: NANIROYAL, Password:
+                  dpnroyals</span
+                >
+              </div>
+              <div
+                class="mt-3 alert alert-danger"
+                role="alert"
+                ng-show="loginError"
+              >
+                Incorrect username or password. Please try again.
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AngularJS Controller -->
+    <script>
+      var app = angular.module("loginApp", []);
+
+      app.controller("LoginController", function ($scope, $window) {
+        $scope.user = {
+          username: "",
+          password: "",
+        };
+
+        $scope.loginError = false;
+
+        $scope.login = function () {
+          // Validate the login credentials (demo only)
+          if (
+            $scope.user.username === "NANIROYAL" &&
+            $scope.user.password === "dpnroyals"
+          ) {
+            // Redirect to naniexp.html upon successful login
+            $window.location.href = "naniexp.html";
+          } else {
+            $scope.loginError = true;
+          }
+        };
+      });
+    </script>
+  </body>
+</html>
